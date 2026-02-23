@@ -1,0 +1,230 @@
+import hashlib
+import os
+
+# Where we store the account info
+USER_INFO_FILE = "users.txt"
+
+# ------------------- STEP 1: HELPER FUNCTIONS -------------------
+# This makes a secret code for the password
+def get_secret_hash(password):
+    # .encode() turns text into bytes for the math part
+    return hashlib.sha256(password.encode()).hexdigest()
+
+
+def get_personal_task_file(name):
+    return name + "_tasks.txt"
+
+# ------------------- STEP 2: USER AUTHENTICATION -------------------
+# --- Registration Part ---
+def create_account():
+    print("\n[ SIGN UP ]")
+    name = input("Pick a username: ")
+    pwd = input("Choose a password: ")
+
+    # Check if someone else already has this name
+    if os.path.exists(USER_INFO_FILE):
+        myfile = open(USER_INFO_FILE, "r")
+        for line in myfile:
+            name_in_file = line.strip().split(":")[0]
+            if name_in_file == name:
+                print("Sorry, that name is used. Try another one.")
+                myfile.close()
+                return
+        myfile.close()
+
+    # Save the hashed password so it's safe
+    mypwd = get_secret_hash(pwd)
+    myfile = open(USER_INFO_FILE, "a")
+    myfile.write(name + ":" + mypwd + "\n")
+    myfile.close()
+    print("Nice! You can log in now.")
+
+
+# --- Login Part ---
+def sign_in():
+    print("\n[ LOGIN ]")
+    name = input("Enter Name: ")
+    pwd = input("Enter Password: ")
+
+    if not os.path.exists(USER_INFO_FILE):
+        print("No accounts found. Please sign up first.")
+        return None
+
+    user_pwd_hash = get_secret_hash(pwd)
+
+    myfile = open(USER_INFO_FILE, "r")
+    for line in myfile:
+        parts = line.strip().split(":")
+        user_check = parts[0]
+        hash_check = parts[1]
+
+        if user_check == name and hash_check == user_pwd_hash:
+            print("Successfully logged in! Hello,", name)
+            myfile.close()
+            return name
+
+    myfile.close()
+    print("Oops, wrong name or password.")
+    return None
+
+# ------------------- STEP 3: TASK MANAGEMENT -------------------
+# --- Task Section ---
+def new_task(name):
+    print("\n[ ADD TASK ]")
+    info = input("Describe your task: ")
+
+    filename = get_personal_task_file(name)
+
+    # Figure out the ID number
+    counter = 1
+    if os.path.exists(filename):
+        myfile = open(filename, "r")
+        for line in myfile:
+            counter = counter + 1
+        myfile.close()
+
+    # Save the task info
+    myfile = open(filename, "a")
+    myfile.write(str(counter) + "," + info + ",Pending\n")
+    myfile.close()
+    print("Done! Task is saved with ID:", counter)
+
+
+def show_list(name):
+    print("\n[ MY TO-DO LIST ]")
+    filename = get_personal_task_file(name)
+
+    if not os.path.exists(filename):
+        print("Nothing to do yet! Add a task.")
+        return
+
+    # Print a header for our list
+    print("ID   | TASK DESCRIPTION               | STATUS")
+    print("----------------------------------------------")
+
+    myfile = open(filename, "r")
+    for line in myfile:
+        data = line.strip().split(",")
+        task_id = data[0]
+        task_desc = data[1]
+        task_stat = data[2]
+        # Make the columns stay straight
+        spacing = 30 - len(task_desc)
+        print(task_id + "    | " + task_desc + " " * spacing + "| " + task_stat)
+    myfile.close()
+
+
+def finish_task(name):
+    filename = get_personal_task_file(name)
+    if not os.path.exists(filename):
+        print("No tasks to finish.")
+        return
+
+    user_id_input = input("Which task ID is finished? ")
+
+    task_list = []
+    found_it = False
+
+    myfile = open(filename, "r")
+    for line in myfile:
+        parts = line.strip().split(",")
+        if parts[0] == user_id_input:
+            parts[2] = "Completed"
+            found_it = True
+        task_list.append(parts)
+    myfile.close()
+
+    if found_it:
+        # Overwrite the file with the updated status
+        myfile = open(filename, "w")
+        for t in task_list:
+            myfile.write(t[0] + "," + t[1] + "," + t[2] + "\n")
+        myfile.close()
+        print("Awesome! Status updated.")
+    else:
+        print("I can't find that ID in the list.")
+
+
+def delete_something(name):
+    filename = get_personal_task_file(name)
+    if not os.path.exists(filename):
+        print("Nothing here to delete.")
+        return
+
+    user_id_input = input("Task ID to remove: ")
+
+    saved_list = []
+    found_it = False
+
+    myfile = open(filename, "r")
+    for line in myfile:
+        parts = line.strip().split(",")
+        if parts[0] == user_id_input:
+            found_it = True  # Found it, so we don't save it
+        else:
+            saved_list.append(parts)
+    myfile.close()
+
+    if found_it:
+        myfile = open(filename, "w")
+        for t in saved_list:
+            myfile.write(t[0] + "," + t[1] + "," + t[2] + "\n")
+        myfile.close()
+        print("Removed successfully.")
+    else:
+        print("Could not find that task.")
+
+
+# ------------------- STEP 4: MENUS -------------------
+# --- Menus ---
+def user_dashboard(user):
+    active = True
+    while active:
+        print("\n--- DASHBOARD (Logged in as: " + user + ") ---")
+        print("1. New Task")
+        print("2. Show List")
+        print("3. Finish Task")
+        print("4. Remove Task")
+        print("5. Logout")
+
+        pick = input("Pick an option: ")
+
+        if pick == "1":
+            new_task(user)
+        elif pick == "2":
+            show_list(user)
+        elif pick == "3":
+            finish_task(user)
+        elif pick == "4":
+            delete_something(user)
+        elif pick == "5":
+            print("Logging out...")
+            active = False
+        else:
+            print("Not a valid pick. Try 1-5.")
+
+
+def start_program():
+    while True:
+        print("\n=== MY TASK MANAGER ===")
+        print("1. Create Account")
+        print("2. Sign In")
+        print("3. Close App")
+
+        choice = input("Select choice: ")
+
+        if choice == "1":
+            create_account()
+        elif choice == "2":
+            user = sign_in()
+            if user != None:
+                user_dashboard(user)
+        elif choice == "3":
+            print("Bye!")
+            break
+        else:
+            print("Invalid input.")
+
+
+if __name__ == "__main__":
+    start_program()
