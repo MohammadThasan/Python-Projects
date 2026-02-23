@@ -1,1 +1,253 @@
+import os
+
+# =============================================
+# BUDGET TRACKER - BEGINNER VERSION
+# =============================================
+
+# ------------------- SECTION 1: GLOBAL SETUP -------------------
+# DESCRIPTION:
+# We create our variables here. 'expenses' stores your items,
+# and 'monthly_budget' stores your spending limit.
+
+# LEARNER NOTE: A list [] is like a shopping basket. We keep adding things to it!
+expenses = []
+
+# LEARNER NOTE: A float is a number with a decimal point (like 5.50 or 0.0).
+monthly_budget = 0.0
+
+# LEARNER NOTE: These are strings that point to the names of our text files.
+FILE_NAME = "expenses.csv"
+BUDGET_FILE = "budget.txt"
+
+# ------------------- SECTION 2: LOAD AND SAVE -------------------
+# DESCRIPTION:
+# These functions handle the computer's memory.
+# Data is saved as: Date,Category,Amount,Description
+
+
+def load_data():
+    """Gets your saved data back when you start the program."""
+    global expenses, monthly_budget
+
+    # --- TASK 1: Load the Expenses CSV ---
+    # LEARNER NOTE: We check if the file exists so the program doesn't crash!
+    if os.path.exists(FILE_NAME):
+        # LEARNER NOTE: "r" stands for Read mode.
+        f = open(FILE_NAME, "r")
+        for line in f:
+            # LEARNER NOTE: .strip() removes the hidden "Enter" at the end of each line
+            line = line.strip()
+            if line == "":
+                continue
+            # LEARNER NOTE: .split(",") turns "date,cat,amt,desc" into a list
+            parts = line.split(",")
+            if len(parts) == 4:
+                # We save it as a 'Dictionary' (data with labels)
+                new_item = {
+                    "date": parts[0],
+                    "category": parts[1],
+                    "amount": float(parts[2]),  # Turn text back into a number!
+                    "description": parts[3],
+                }
+                expenses.append(new_item)
+        f.close()
+        print("Past expenses loaded!")
+
+    # --- TASK 2: Load the Budget Limit ---
+    if os.path.exists(BUDGET_FILE):
+        f = open(BUDGET_FILE, "r")
+        val = f.read().strip()
+        if val != "":
+            # Store the saved number back into our monthly_budget variable
+            monthly_budget = float(val)
+        f.close()
+
+
+def save_data():
+    """Saves everything to files so you don't lose your work."""
+    # Save Expenses
+    f = open(FILE_NAME, "w")
+    for item in expenses:
+        row = (
+            item["date"]
+            + ","
+            + item["category"]
+            + ","
+            + str(item["amount"])
+            + ","
+            + item["description"]
+            + "\n"
+        )
+        f.write(row)
+    f.close()
+
+    # Save Budget
+    f = open(BUDGET_FILE, "w")
+    f.write(str(monthly_budget))
+    f.close()
+
+    print("Everything is saved to " + FILE_NAME)
+
+
+# ------------------- SECTION 3: BUDGET LOGIC -------------------
+# DESCRIPTION:
+# This part handles setting and tracking your limit.
+
+
+def set_budget():
+    """Allows you to set or change your monthly spending limit."""
+    global monthly_budget
+    print("\n--- SET MONTHLY BUDGET ---")
+
+    # LEARNER NOTE: input() always creates a STRING. We convert it to a number later.
+    val = input("Enter the total amount you want to budget for the month: ")
+
+    # LEARNER NOTE: We remove the $ sign in case the user typed it.
+    val = val.replace("$", "")
+
+    if val == "":
+        print("Error: You didn't enter a number!")
+        return
+
+    # LEARNER NOTE: We use try/except as a 'Safety Net' so the app doesn't crash
+    # if someone types letters instead of numbers.
+    try:
+        monthly_budget = float(val)
+        print("Budget is now set to: $" + str(monthly_budget))
+    except ValueError:
+        print("Error: Please enter a valid number.")
+
+
+def calculate_total():
+    """Adds up every expense in our list."""
+    total = 0.0
+    for item in expenses:
+        total = total + item["amount"]
+    return total
+
+
+def track_budget():
+    """Compares your total spending to your budget."""
+    global monthly_budget
+    print("\n--- TRACK BUDGET ---")
+
+    # LEARNER NOTE: If the budget is still 0.0, we help the user by asking for it.
+    if monthly_budget == 0:
+        print("You haven't set a budget yet! Let's do it now:")
+        set_budget()
+        if monthly_budget == 0:
+            return
+
+    # Call our calculator function
+    total_spent = calculate_total()
+
+    print("Monthly Budget: $" + str(monthly_budget))
+    print("Total Spent:    $" + str(total_spent))
+
+    # LEARNER NOTE: This is the Comparison part!
+    if total_spent > monthly_budget:
+        print("You have exceeded your budget!")
+    else:
+        # Calculate how much is left
+        balance = monthly_budget - total_spent
+        print("You have $" + str(balance) + " left for the month")
+
+
+# ------------------- SECTION 4: EXPENSE MANAGEMENT -------------------
+
+
+def add_expense():
+    """Asks for 4 details to create a new expense."""
+    print("\n--- ADD NEW EXPENSE ---")
+
+    # LEARNER NOTE: We collect 4 strings from the user first.
+    date = input("Enter date (DD-MM-YYYY): ")
+    category = input("Enter category (e.g., Food, Transport): ")
+    amt_text = input("Enter amount ($): ")
+
+    if amt_text == "":
+        print("Error: Amount cannot be empty.")
+        return
+
+    try:
+        amt_num = float(amt_text)
+        description = input("Enter description: ")
+
+        # LEARNER NOTE: We "Package" the data into a dictionary {}
+        new_item = {
+            "date": date,
+            "category": category,
+            "amount": amt_num,
+            "description": description,
+        }
+        expenses.append(new_item)
+        print("Expense added successfully!")
+    except ValueError:
+        print("Error: That's not a valid number.")
+
+
+def view_expenses():
+    """Shows every expense in a table."""
+    print("\n--- ALL EXPENSES ---")
+
+    # LEARNER NOTE: len() checks the size of our list.
+    if len(expenses) == 0:
+        print("There is nothing in the list.")
+        return
+
+    print("DATE       | CATEGORY   | AMOUNT | DESCRIPTION")
+    print("-" * 50)
+    # LEARNER NOTE: A 'for' loop goes through every item in our basket one-by-one.
+    for item in expenses:
+        d = item["date"]
+        c = item["category"]
+        a = str(item["amount"])
+        desc = item["description"]
+        print(d.ljust(10) + " | " + c.ljust(10) + " | $" + a.ljust(6) + " | " + desc)
+
+
+# ------------------- SECTION 5: THE INTERACTIVE MENU -------------------
+
+
+def show_menu():
+    """Main menu of the program."""
+    # STEP 1: Always load data as soon as the app opens!
+    load_data()
+
+    # STEP 2: Start a loop so the app stays open.
+    while True:
+        print("\n===== BUDGET TRACKER MENU =====")
+        print("1. Add Expense")
+        print("2. View Expenses")
+        print("3. Set Monthly Budget")
+        print("4. Track Budget")
+        print("5. Save Expenses")
+        print("6. Exit")
+
+        # LEARNER NOTE: .strip() removes accidental spaces from the choice.
+        pick = input("Select an option (1-6): ").strip()
+
+        # LEARNER NOTE: We use If/Elif to decide which function to run.
+        if pick == "1":
+            add_expense()
+        elif pick == "2":
+            view_expenses()
+        elif pick == "3":
+            set_budget()
+        elif pick == "4":
+            track_budget()
+        elif pick == "5":
+            save_data()
+        elif pick == "6":
+            # LEARNER NOTE: We save one last time before stopping.
+            save_data()
+            print("Budget data saved. Goodbye!")
+            # LEARNER NOTE: 'break' stops the 'while True' loop immediately.
+            break
+        else:
+            print("Invalid choice! Try numbers 1 to 6.")
+
+
+if __name__ == "__main__":
+    show_menu()
 
