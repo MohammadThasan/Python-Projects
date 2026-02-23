@@ -1,5 +1,5 @@
-import hashlib
-import os
+import hashlib   # Provides hashing functions (to securely store passwords)
+import os        # Lets us check if files exist and interact with the file system
 
 # Where we store the account info
 USER_INFO_FILE = "users.txt"
@@ -8,15 +8,23 @@ USER_INFO_FILE = "users.txt"
 # This makes a secret code for the password
 def get_secret_hash(password):
     # .encode() turns text into bytes for the math part
+    # .encode() turns the string into bytes, which the hashing function requires.
+    # .hexdigest() returns the hash as a readable hexadecimal string.
+    
     return hashlib.sha256(password.encode()).hexdigest()
 
 
 def get_personal_task_file(name):
+    """
+    Build the filename that will hold the tasks for a specific user.
+    Each user gets their own file so tasks are separated.
+    """
     return name + "_tasks.txt"
 
 
 # --- Registration Part ---
 def create_account():
+    """Allow a new user to sign up with a unique username."""
     print("\n[ SIGN UP ]")
     name = input("Pick a username: ")
     pwd = input("Choose a password: ")
@@ -42,6 +50,7 @@ def create_account():
 
 # --- Login Part ---
 def sign_in():
+ """Authenticate an existing user. Returns the username if successful, otherwise None."""
     print("\n[ LOGIN ]")
     name = input("Enter Name: ")
     pwd = input("Enter Password: ")
