@@ -42,14 +42,21 @@ def load_data():
             # LEARNER NOTE: .split(",") turns "date,cat,amt,desc" into a list
             parts = line.split(",")
             if len(parts) == 4:
-                # We save it as a 'Dictionary' (data with labels)
-                new_item = {
-                    "date": parts[0],
-                    "category": parts[1],
-                    "amount": float(parts[2]),  # Turn text back into a number!
-                    "description": parts[3],
-                }
-                expenses.append(new_item)
+                try:
+                    # We save it as a 'Dictionary' (data with labels)
+                    new_item = {
+                        "date": parts[0],
+                        "category": parts[1],
+                        "amount": float(parts[2]),  # Turn text back into a number!
+                        "description": parts[3],
+                    }
+                    expenses.append(new_item)
+                except ValueError:
+                    print(
+                        "Skipping a line in "
+                        + FILE_NAME
+                        + " because it has a bad amount."
+                    )
         f.close()
         print("Past expenses loaded!")
 
@@ -95,25 +102,16 @@ def save_data():
 
 
 def set_budget():
-    """Allows you to set or change your monthly spending limit."""
+    """Step 3: Function to input monthly budget."""
     global monthly_budget
     print("\n--- SET MONTHLY BUDGET ---")
 
-    # LEARNER NOTE: input() always creates a STRING. We convert it to a number later.
+    # Requirement: Prompt for total amount
     val = input("Enter the total amount you want to budget for the month: ")
 
-    # LEARNER NOTE: We remove the $ sign in case the user typed it.
-    val = val.replace("$", "")
-
-    if val == "":
-        print("Error: You didn't enter a number!")
-        return
-
-    # LEARNER NOTE: We use try/except as a 'Safety Net' so the app doesn't crash
-    # if someone types letters instead of numbers.
     try:
         monthly_budget = float(val)
-        print("Budget is now set to: $" + str(monthly_budget))
+        print("Budget set successfully.")
     except ValueError:
         print("Error: Please enter a valid number.")
 
@@ -127,30 +125,36 @@ def calculate_total():
 
 
 def track_budget():
-    """Compares your total spending to your budget."""
+    """Step 3: Function to calculate total and compare with budget."""
     global monthly_budget
     print("\n--- TRACK BUDGET ---")
 
-    # LEARNER NOTE: If the budget is still 0.0, we help the user by asking for it.
+    # If no budget is set, we must set it first
     if monthly_budget == 0:
-        print("You haven't set a budget yet! Let's do it now:")
+        print("No budget set yet! Please set one first.")
         set_budget()
         if monthly_budget == 0:
             return
 
-    # Call our calculator function
+    # Calculate current values
     total_spent = calculate_total()
 
-    print("Monthly Budget: $" + str(monthly_budget))
-    print("Total Spent:    $" + str(total_spent))
+    # 1. Show the current status lines
+    print("Current Budget: $" + str(monthly_budget))
+    print("Monthly Budget: " + str(monthly_budget))
 
-    # LEARNER NOTE: This is the Comparison part!
     if total_spent > monthly_budget:
         print("You have exceeded your budget!")
     else:
-        # Calculate how much is left
         balance = monthly_budget - total_spent
-        print("You have $" + str(balance) + " left for the month")
+        print("You have " + str(balance) + " left for the month")
+
+    print("Total Spent so far: " + str(total_spent))
+
+    # 2. Ask for update at the very end
+    choice = input("Do you want to update it? (y/n): ").strip().lower()
+    if choice == "y":
+        set_budget()
 
 
 # ------------------- SECTION 4: EXPENSE MANAGEMENT -------------------
@@ -160,9 +164,9 @@ def add_expense():
     """Asks for 4 details to create a new expense."""
     print("\n--- ADD NEW EXPENSE ---")
 
-    # LEARNER NOTE: We collect 4 strings from the user first.
-    date = input("Enter date (DD-MM-YYYY): ")
-    category = input("Enter category (e.g., Food, Transport): ")
+    # Prompt for expense details
+    date = input("Enter date (YYYY-MM-DD): ")
+    category = input("Enter category (e.g., Food, Travel): ")
     amt_text = input("Enter amount ($): ")
 
     if amt_text == "":
@@ -197,8 +201,29 @@ def view_expenses():
 
     print("DATE       | CATEGORY   | AMOUNT | DESCRIPTION")
     print("-" * 50)
-    # LEARNER NOTE: A 'for' loop goes through every item in our basket one-by-one.
+
     for item in expenses:
+        # STEP 1: Check if any part of the expense is missing
+        # We manually check the keys to make it very clear for a beginner
+        if (
+            "date" not in item
+            or "category" not in item
+            or "amount" not in item
+            or "description" not in item
+        ):
+            print("Notice: Skipping an incomplete entry (missing data).")
+            continue
+
+        # STEP 2: Make sure the values aren't empty
+        if item["date"] == "" or item["category"] == "" or item["description"] == "":
+            print("Notice: Skipping an entry with empty details.")
+            continue
+
+        # STEP 3: Make sure the amount is a positive number
+        if item["amount"] <= 0:
+            print("Notice: Skipping an entry with zero or negative cost.")
+            continue
+
         d = item["date"]
         c = item["category"]
         a = str(item["amount"])
@@ -219,35 +244,29 @@ def show_menu():
         print("\n===== BUDGET TRACKER MENU =====")
         print("1. Add Expense")
         print("2. View Expenses")
-        print("3. Set Monthly Budget")
-        print("4. Track Budget")
-        print("5. Save Expenses")
-        print("6. Exit")
+        print("3. Track Budget")
+        print("4. Save Expenses")
+        print("5. Exit")
 
-        # LEARNER NOTE: .strip() removes accidental spaces from the choice.
-        pick = input("Select an option (1-6): ").strip()
+        # Select an option
+        pick = input("Select an option (1-5): ").strip()
 
-        # LEARNER NOTE: We use If/Elif to decide which function to run.
         if pick == "1":
             add_expense()
         elif pick == "2":
             view_expenses()
         elif pick == "3":
-            set_budget()
-        elif pick == "4":
             track_budget()
-        elif pick == "5":
+        elif pick == "4":
             save_data()
-        elif pick == "6":
-            # LEARNER NOTE: We save one last time before stopping.
+        elif pick == "5":
+            # Save data before exiting
             save_data()
             print("Budget data saved. Goodbye!")
-            # LEARNER NOTE: 'break' stops the 'while True' loop immediately.
             break
         else:
-            print("Invalid choice! Try numbers 1 to 6.")
+            print("Invalid choice! Try numbers 1 to 5.")
 
 
 if __name__ == "__main__":
     show_menu()
-
