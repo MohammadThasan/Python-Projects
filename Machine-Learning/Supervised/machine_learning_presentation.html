@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning: Supervised vs Unsupervised Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .slide {
+            background: white;
+            margin: 20px 0;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #34495e;
+            font-size: 2.5em;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #2980b9;
+            font-size: 1.8em;
+            margin: 20px 0 15px 0;
+        }
+        
+        p {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #3498db;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        
+        .algorithm-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            margin: 10px 0;
+        }
+        
+        .algorithm-box h4 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        
+        ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+            font-size: 1.1em;
+        }
+        
+        .example-box {
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .code-reference {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+        
+        .quiz-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .quiz-question {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .quiz-options {
+            display: grid;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .quiz-option {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .quiz-option:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .quiz-option.selected {
+            border-color: #f39c12;
+            background: rgba(243,156,18,0.3);
+        }
+        
+        .quiz-option.correct {
+            border-color: #27ae60;
+            background: rgba(39,174,96,0.3);
+        }
+        
+        .quiz-option.incorrect {
+            border-color: #e74c3c;
+            background: rgba(231,76,60,0.3);
+        }
+        
+        .quiz-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .quiz-feedback.show {
+            display: block;
+        }
+        
+        .quiz-feedback.correct {
+            background: rgba(39,174,96,0.2);
+            border-left: 4px solid #27ae60;
+        }
+        
+        .quiz-feedback.incorrect {
+            background: rgba(231,76,60,0.2);
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .assignment-box {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .assignment-box h4 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .illustration-box {
+            background: #f8f9fa;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .illustration-box .emoji {
+            font-size: 3em;
+            margin: 10px;
+        }
+        
+        .progress-bar {
+            background: #ecf0f1;
+            height: 8px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .interactive-demo {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .demo-input {
+            background: #34495e;
+            color: #ecf0f1;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 5px;
+            width: 100px;
+        }
+        
+        .demo-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .demo-button:hover {
+            background: #2980b9;
+        }
+        
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .nav-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 2px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .nav-button:hover {
+            background: #2980b9;
+        }
+        
+        .image-placeholder {
+            background: #ecf0f1;
+            border: 2px dashed #bdc3c7;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 20px 0;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <button class="nav-button" onclick="scrollToSlide(0)">Intro</button>
+        <button class="nav-button" onclick="scrollToSlide(1)">What is ML?</button>
+        <button class="nav-button" onclick="scrollToSlide(2)">Applications</button>
+        <button class="nav-button" onclick="scrollToSlide(3)">Supervised</button>
+        <button class="nav-button" onclick="scrollToSlide(4)">Types</button>
+        <button class="nav-button" onclick="scrollToSlide(5)">Linear Reg</button>
+        <button class="nav-button" onclick="scrollToSlide('5a')">ML Concepts</button>
+        <button class="nav-button" onclick="scrollToSlide('5b')">Algorithms</button>
+        <button class="nav-button" onclick="scrollToSlide(6)">Unsupervised</button>
+    </div>
+
+    <div class="score-display">
+        <div>Quiz Score: <span id="score">0</span>/<span id="total">0</span></div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Slide 1: Title Slide -->
+        <div class="slide" id="slide-0">
+            <h1>Machine Learning</h1>
+            <h2 style="text-align: center; border: none; color: #3498db;">Supervised vs Unsupervised Learning</h2>
+            <div class="highlight">
+                <p style="text-align: center; font-size: 1.4em; font-style: italic;">
+                    "Machine learning is the science of getting computers to learn without being explicitly programmed."
+                    <br><strong>- Arthur Samuel</strong>
+                </p>
+            </div>
+            <div class="image-placeholder">
+                <p>🤖 AI & Machine Learning Concepts 🧠</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: What is Machine Learning? -->
+        <div class="slide" id="slide-1">
+            <h2>What is Machine Learning?</h2>
+            
+            <div class="highlight">
+                <h3>Definition</h3>
+                <p>Machine learning is a field of study that gives computers the ability to learn without being explicitly programmed. It's about creating algorithms that can learn patterns from data and make predictions or decisions.</p>
+            </div>
+
+            <h3>Why Machine Learning?</h3>
+            <p>Traditional programming requires us to write explicit instructions for every scenario. But for complex tasks like:</p>
+            <ul>
+                <li>🔍 Web search ranking (Google, Bing)</li>
+                <li>📸 Photo recognition (Instagram, Snapchat)</li>
+                <li>🎬 Movie recommendations (Netflix, YouTube)</li>
+                <li>🗣️ Speech recognition (Siri, Google Assistant)</li>
+                <li>📧 Spam detection</li>
+                <li>🚗 Self-driving cars</li>
+            </ul>
+            <p>We simply don't know how to write explicit programs. Machine learning allows computers to figure out these patterns by themselves!</p>
+
+            <div class="example-box">
+                <h4>Real-World Impact</h4>
+                <p>According to McKinsey, AI and machine learning is estimated to create an additional <strong>$13 trillion USD</strong> of value annually by 2030!</p>
+            </div>
+
+            <!-- Interactive Illustration -->
+            <div class="illustration-box">
+                <div class="emoji">🤖</div>
+                <h4>Machine Learning in Action</h4>
+                <p>Imagine teaching a computer to recognize cats in photos:</p>
+                <div style="display: flex; justify-content: space-around; align-items: center; margin: 20px 0;">
+                    <div>📸 Show 1000s of cat photos</div>
+                    <div>➡️</div>
+                    <div>🧠 Computer learns patterns</div>
+                    <div>➡️</div>
+                    <div>✅ Recognizes new cats!</div>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-container">
+                <div class="quiz-question">🧠 Quick Check: Which of these is the BEST example of machine learning?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 1)">
+                        A) A calculator that adds numbers using pre-programmed formulas
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 1)">
+                        B) A GPS that follows pre-defined shortest path algorithms
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 1)">
+                        C) Netflix recommending movies based on your viewing history
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 1)">
+                        D) A digital clock displaying the current time
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-1">
+                    <strong>Explanation:</strong> Netflix uses machine learning to analyze your viewing patterns and preferences to recommend movies you might like. The other options use pre-programmed rules, not learning from data.
+                </div>
+            </div>
+
+            <!-- Assignment -->
+            <div class="assignment-box">
+                <h4>🎯 Mini Assignment: Spot the ML!</h4>
+                <p><strong>Task:</strong> Look around you right now and identify 3 applications that likely use machine learning.</p>
+                <p><strong>Hints:</strong> Think about apps on your phone, websites you use, or smart devices around you.</p>
+                <p><strong>Examples to get you started:</strong></p>
+                <ul>
+                    <li>📱 Your phone's autocorrect feature</li>
+                    <li>🎵 Spotify's music recommendations</li>
+                    <li>📧 Gmail's spam detection</li>
+                </ul>
+                <p><strong>Reflection:</strong> For each example, think: "What data does it learn from?" and "What does it predict or recommend?"</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Applications of Machine Learning -->
+        <div class="slide" id="slide-2">
+            <h2>Applications of Machine Learning</h2>
+            
+            <div class="two-column">
+                <div>
+                    <h3>🏢 Business Applications</h3>
+                    <ul>
+                        <li><strong>E-commerce:</strong> Product recommendations</li>
+                        <li><strong>Finance:</strong> Fraud detection, algorithmic trading</li>
+                        <li><strong>Marketing:</strong> Customer segmentation, ad targeting</li>
+                        <li><strong>Manufacturing:</strong> Quality control, predictive maintenance</li>
+                    </ul>
+                    
+                    <h3>🌍 Social Impact</h3>
+                    <ul>
+                        <li><strong>Healthcare:</strong> Medical diagnosis, drug discovery</li>
+                        <li><strong>Environment:</strong> Climate modeling, renewable energy optimization</li>
+                        <li><strong>Agriculture:</strong> Crop monitoring, precision farming</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3>💻 Technology Applications</h3>
+                    <ul>
+                        <li><strong>Computer Vision:</strong> Image recognition, autonomous vehicles</li>
+                        <li><strong>Natural Language:</strong> Translation, chatbots</li>
+                        <li><strong>Robotics:</strong> Industrial automation, service robots</li>
+                        <li><strong>Gaming:</strong> AI opponents, procedural generation</li>
+                    </ul>
+                    
+                    <div class="code-reference">
+                        <strong>Notebook Reference:</strong><br>
+                        📁 1_Supervised_Machine_Learning/<br>
+                        📁 3_Unsupervised_Machine_Learning/
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Demo -->
+            <div class="interactive-demo">
+                <h4>🔬 Try It: Business Impact Calculator</h4>
+                <p>Estimate potential ML impact for a business:</p>
+                <div>
+                    Current manual processing time (hours/day): <input type="number" class="demo-input" id="manual-time" value="8">
+                </div>
+                <div>
+                    ML automation efficiency (%): <input type="number" class="demo-input" id="efficiency" value="70">
+                </div>
+                <div>
+                    <button class="demo-button" onclick="calculateImpact()">Calculate Time Saved</button>
+                    <span id="impact-result" style="margin-left: 15px; font-weight: bold;"></span>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-container">
+                <div class="quiz-question">🏢 Which industry is MOST likely to benefit from anomaly detection?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 2)">
+                        A) Restaurant menu design
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 2)">
+                        B) Credit card fraud detection
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 2)">
+                        C) Weather forecasting
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 2)">
+                        D) Social media posting
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-2">
+                    <strong>Correct!</strong> Credit card companies use anomaly detection to identify unusual spending patterns that might indicate fraud. This helps protect customers from unauthorized transactions.
+                </div>
+            </div>
+
+            <!-- Assignment -->
+            <div class="assignment-box">
+                <h4>🎯 Industry Analysis Assignment</h4>
+                <p><strong>Choose your industry:</strong> Pick an industry you're familiar with (healthcare, education, retail, etc.)</p>
+                <p><strong>Identify 3 ML opportunities:</strong></p>
+                <ol>
+                    <li><strong>Prediction Problem:</strong> What could you predict to save time/money?</li>
+                    <li><strong>Classification Problem:</strong> What categories could you automatically sort?</li>
+                    <li><strong>Pattern Discovery:</strong> What hidden patterns might exist in your data?</li>
+                </ol>
+                <p><strong>Example - Healthcare:</strong></p>
+                <ul>
+                    <li>Predict: Patient readmission risk</li>
+                    <li>Classify: Medical images (normal vs abnormal)</li>
+                    <li>Discover: Patient groups with similar treatment responses</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Supervised Learning -->
+        <div class="slide" id="slide-3">
+            <h2>Supervised Learning</h2>
+            
+            <div class="highlight">
+                <h3>🎯 Key Characteristic</h3>
+                <p>Supervised learning algorithms learn from <strong>labeled examples</strong>. You provide the algorithm with input-output pairs (x → y), and it learns to map inputs to correct outputs.</p>
+            </div>
+
+            <h3>How Supervised Learning Works</h3>
+            <div class="two-column">
+                <div>
+                    <h4>Training Phase</h4>
+                    <ul>
+                        <li>📊 Provide training data with correct answers</li>
+                        <li>🧠 Algorithm learns patterns from examples</li>
+                        <li>📈 Model adjusts parameters to minimize errors</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Prediction Phase</h4>
+                    <ul>
+                        <li>🔮 Give new, unseen input to trained model</li>
+                        <li>⚡ Model predicts output based on learned patterns</li>
+                        <li>✅ Evaluate prediction accuracy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>📧 Example: Email Spam Detection</h4>
+                <p><strong>Input (x):</strong> Email content and metadata</p>
+                <p><strong>Output (y):</strong> Spam or Not Spam</p>
+                <p><strong>Training:</strong> Show algorithm thousands of emails labeled as spam/not spam</p>
+                <p><strong>Prediction:</strong> Algorithm can classify new emails automatically</p>
+            </div>
+
+            <div class="code-reference">
+                <strong>Notebook:</strong> C1_W1_Lab03_Model_Representation_Soln.ipynb<br>
+                <strong>Location:</strong> 1_Supervised_Machine_Learning/Week 1/
+            </div>
+
+            <!-- Visual Illustration -->
+            <div class="illustration-box">
+                <h4>📊 Supervised Learning Process</h4>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">
+                    <div style="text-align: center;">
+                        <div class="emoji">📚</div>
+                        <p><strong>Training Data</strong><br>(x, y) pairs</p>
+                    </div>
+                    <div>➡️</div>
+                    <div style="text-align: center;">
+                        <div class="emoji">🧠</div>
+                        <p><strong>Learning Algorithm</strong><br>Finds patterns</p>
+                    </div>
+                    <div>➡️</div>
+                    <div style="text-align: center;">
+                        <div class="emoji">🎯</div>
+                        <p><strong>Model</strong><br>Makes predictions</p>
+                    </div>
+                    <div>➡️</div>
+                    <div style="text-align: center;">
+                        <div class="emoji">🔮</div>
+                        <p><strong>New Prediction</strong><br>ŷ for new x</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Demo -->
+            <div class="interactive-demo">
+                <h4>🏠 Try It: Simple House Price Predictor</h4>
+                <p>Based on our linear model: Price = 150 × Size + 50,000</p>
+                <div>
+                    House size (sq ft): <input type="number" class="demo-input" id="house-size" value="1500">
+                    <button class="demo-button" onclick="predictPrice()">Predict Price</button>
+                    <span id="price-result" style="margin-left: 15px; font-weight: bold;"></span>
+                </div>
+                <p style="font-size: 0.9em; margin-top: 10px;">Try different sizes: 1000, 2000, 2500 sq ft</p>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-container">
+                <div class="quiz-question">🎯 In supervised learning, what does the "y" represent?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 3)">
+                        A) The input feature we want to analyze
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 3)">
+                        B) The correct answer or target we want to predict
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 3)">
+                        C) The learning algorithm we choose
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 3)">
+                        D) The number of training examples
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-3">
+                    <strong>Exactly right!</strong> In supervised learning, 'y' is the target variable - the correct answer that we want our model to learn to predict. For example, in house price prediction, 'y' would be the actual sale price.
+                </div>
+            </div>
+
+            <!-- Assignment -->
+            <div class="assignment-box">
+                <h4>🎯 Design Your Supervised Learning Problem</h4>
+                <p><strong>Step 1:</strong> Choose a prediction problem from your daily life</p>
+                <p><strong>Step 2:</strong> Define your inputs (x) and output (y):</p>
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <p><strong>Example - Predicting Study Time Needed:</strong></p>
+                    <ul>
+                        <li><strong>Input (x):</strong> Course difficulty (1-10), your experience level (1-5), assignment length (pages)</li>
+                        <li><strong>Output (y):</strong> Hours needed to complete</li>
+                    </ul>
+                </div>
+                <p><strong>Step 3:</strong> Collect 10 data points (x, y) from your experience</p>
+                <p><strong>Step 4:</strong> Think about what patterns the algorithm might discover</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Types of Supervised Learning -->
+        <div class="slide" id="slide-4">
+            <h2>Types of Supervised Learning</h2>
+            
+            <div class="two-column">
+                <div>
+                    <h3>📊 Regression</h3>
+                    <div class="algorithm-box">
+                        <h4>Predicts Continuous Numbers</h4>
+                        <p>Output can be any real number from an infinite range</p>
+                        
+                        <h4>Examples:</h4>
+                        <ul>
+                            <li>🏠 House price prediction ($150K, $200K, $350K...)</li>
+                            <li>🌡️ Temperature forecasting (23.5°C, 31.2°C...)</li>
+                            <li>📈 Stock price prediction</li>
+                            <li>⏱️ Delivery time estimation</li>
+                        </ul>
+                        
+                        <h4>Key Algorithms:</h4>
+                        <ul>
+                            <li><strong>Linear Regression:</strong> Fits straight line to data</li>
+                            <li><strong>Polynomial Regression:</strong> Fits curves to data</li>
+                            <li><strong>Random Forest:</strong> Ensemble of decision trees</li>
+                            <li><strong>Neural Networks:</strong> Deep learning approaches</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>🏷️ Classification</h3>
+                    <div class="algorithm-box">
+                        <h4>Predicts Categories/Classes</h4>
+                        <p>Output is from a finite set of discrete categories</p>
+                        
+                        <h4>Examples:</h4>
+                        <ul>
+                            <li>🩺 Medical diagnosis (Benign/Malignant)</li>
+                            <li>🐱 Image recognition (Cat/Dog/Bird)</li>
+                            <li>📧 Email classification (Spam/Not Spam)</li>
+                            <li>⭐ Sentiment analysis (Positive/Negative/Neutral)</li>
+                        </ul>
+                        
+                        <h4>Key Algorithms:</h4>
+                        <ul>
+                            <li><strong>Logistic Regression:</strong> Binary classification</li>
+                            <li><strong>Decision Trees:</strong> Rule-based classification</li>
+                            <li><strong>Support Vector Machines:</strong> Margin-based classification</li>
+                            <li><strong>Neural Networks:</strong> Complex pattern recognition</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>🏠 Detailed Example: House Price Prediction (Regression)</h4>
+                <p><strong>Dataset:</strong> Portland housing data with size and prices</p>
+                <p><strong>Input:</strong> House size in square feet (1250 sq ft)</p>
+                <p><strong>Model:</strong> Linear regression f(x) = wx + b</p>
+                <p><strong>Output:</strong> Predicted price (~$220,000)</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Linear Regression Deep Dive -->
+        <div class="slide" id="slide-5">
+            <h2>Linear Regression: The Foundation</h2>
+            
+            <div class="highlight">
+                <h3>📐 Mathematical Model</h3>
+                <p><strong>f(x) = wx + b</strong></p>
+                <ul>
+                    <li><strong>w:</strong> Weight/slope parameter</li>
+                    <li><strong>b:</strong> Bias/y-intercept parameter</li>
+                    <li><strong>x:</strong> Input feature</li>
+                    <li><strong>f(x):</strong> Predicted output</li>
+                </ul>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <h3>🎯 Cost Function</h3>
+                    <div class="algorithm-box">
+                        <h4>Squared Error Cost Function</h4>
+                        <p><strong>J(w,b) = 1/(2m) × Σ(f(x⁽ⁱ⁾) - y⁽ⁱ⁾)²</strong></p>
+                        <ul>
+                            <li>Measures prediction errors</li>
+                            <li>Squares errors to penalize large mistakes</li>
+                            <li>Averages over all training examples</li>
+                            <li>Goal: Minimize J(w,b)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>⛰️ Gradient Descent</h3>
+                    <div class="algorithm-box">
+                        <h4>Optimization Algorithm</h4>
+                        <ul>
+                            <li>Start with initial guesses for w, b</li>
+                            <li>Calculate cost function gradient</li>
+                            <li>Update parameters in steepest descent direction</li>
+                            <li>Repeat until convergence</li>
+                        </ul>
+                        <p><strong>Analogy:</strong> Rolling a ball down a hill to find the lowest point</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-reference">
+                <strong>Notebooks:</strong><br>
+                • C1_W1_Lab04_Cost_function_Soln.ipynb<br>
+                • C1_W1_Lab05_Gradient_Descent_Soln.ipynb<br>
+                <strong>Location:</strong> 1_Supervised_Machine_Learning/Week 1/
+            </div>
+
+            <!-- Interactive Gradient Descent Demo -->
+            <div class="interactive-demo">
+                <h4>⛰️ Interactive Gradient Descent Simulator</h4>
+                <p>Adjust parameters and see how the cost changes:</p>
+                <div>
+                    Weight (w): <input type="range" class="demo-input" id="weight-slider" min="-2" max="3" step="0.1" value="0" oninput="updateLinearModel()">
+                    <span id="weight-value">0</span>
+                </div>
+                <div>
+                    Bias (b): <input type="range" class="demo-input" id="bias-slider" min="-100" max="200" step="10" value="0" oninput="updateLinearModel()">
+                    <span id="bias-value">0</span>
+                </div>
+                <div>
+                    <strong>Current Cost: <span id="current-cost">--</span></strong>
+                    <button class="demo-button" onclick="findOptimal()">Find Optimal Values</button>
+                </div>
+                <p style="font-size: 0.9em;">Try w=1, b=0 for our example dataset!</p>
+            </div>
+
+            <!-- Visual Illustration -->
+            <div class="illustration-box">
+                <h4>🎯 Cost Function Intuition</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                    <div style="text-align: center;">
+                        <div class="emoji">📈</div>
+                        <p><strong>High Cost</strong><br>Predictions far from actual values<br>Bad fit!</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="emoji">🎯</div>
+                        <p><strong>Low Cost</strong><br>Predictions close to actual values<br>Good fit!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-container">
+                <div class="quiz-question">📐 If our linear regression model is f(x) = 2x + 10, what would it predict for x = 5?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 4)">
+                        A) 15
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 4)">
+                        B) 20
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 4)">
+                        C) 25
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 4)">
+                        D) 30
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-4">
+                    <strong>Perfect!</strong> f(5) = 2×5 + 10 = 10 + 10 = 20. In this model, w=2 (slope) and b=10 (y-intercept).
+                </div>
+            </div>
+
+            <!-- Assignment -->
+            <div class="assignment-box">
+                <h4>🎯 Build Your First Linear Model</h4>
+                <p><strong>Dataset:</strong> Create a simple dataset with 5 data points</p>
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <p><strong>Example - Pizza Size vs Price:</strong></p>
+                    <table style="width: 100%; color: white;">
+                        <tr><th>Size (inches)</th><th>Price ($)</th></tr>
+                        <tr><td>8</td><td>12</td></tr>
+                        <tr><td>10</td><td>15</td></tr>
+                        <tr><td>12</td><td>18</td></tr>
+                        <tr><td>14</td><td>21</td></tr>
+                        <tr><td>16</td><td>24</td></tr>
+                    </table>
+                </div>
+                <p><strong>Tasks:</strong></p>
+                <ol>
+                    <li>Plot your data points on paper</li>
+                    <li>Draw a line that fits the data</li>
+                    <li>Estimate w and b for your line</li>
+                    <li>Test: What would a 15-inch pizza cost?</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- NEW SLIDE: Important ML Concepts -->
+        <div class="slide" id="slide-5a">
+            <h2>Important Machine Learning Concepts</h2>
+            
+            <div class="highlight">
+                <h3>🎯 Key Concepts Every ML Practitioner Must Know</h3>
+                <p>Understanding these concepts is crucial for building effective machine learning models</p>
+            </div>
+
+            <!-- Overfitting vs Underfitting Section -->
+            <div class="two-column">
+                <div>
+                    <h3>📉 Underfitting (High Bias)</h3>
+                    <div class="algorithm-box">
+                        <h4>Too Simple Model</h4>
+                        <ul>
+                            <li><strong>Problem:</strong> Model is too simple to capture patterns</li>
+                            <li><strong>Signs:</strong> Poor performance on both training and test data</li>
+                            <li><strong>Example:</strong> Using linear regression for complex curved data</li>
+                            <li><strong>Solutions:</strong> Add more features, use complex models</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>📈 Overfitting (High Variance)</h3>
+                    <div class="algorithm-box">
+                        <h4>Too Complex Model</h4>
+                        <ul>
+                            <li><strong>Problem:</strong> Model memorizes training data, can't generalize</li>
+                            <li><strong>Signs:</strong> Great on training, poor on test data</li>
+                            <li><strong>Example:</strong> High-degree polynomial fitting noise</li>
+                            <li><strong>Solutions:</strong> More data, regularization, simpler models</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Overfitting Demo -->
+            <div class="interactive-demo">
+                <h4>🎮 Interactive: Overfitting Simulator</h4>
+                <p>Adjust model complexity and see the effect on training vs test performance:</p>
+                <div>
+                    Model Complexity: <input type="range" class="demo-input" id="complexity-slider" min="1" max="10" value="3" oninput="updateComplexity()">
+                    <span id="complexity-value">3</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 15px 0;">
+                    <div>Training Accuracy: <span id="train-acc" style="font-weight: bold;">85%</span></div>
+                    <div>Test Accuracy: <span id="test-acc" style="font-weight: bold;">82%</span></div>
+                </div>
+                <div id="fitting-status" style="font-weight: bold; margin-top: 10px;">Good Fit! 🎯</div>
+            </div>
+
+            <!-- Visual Illustration -->
+            <div class="illustration-box">
+                <h4>🎯 The Goldilocks Zone of Machine Learning</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin: 20px 0;">
+                    <div style="text-align: center; padding: 15px; background: #ffebee; border-radius: 10px;">
+                        <div class="emoji">📉</div>
+                        <h5>Underfitting</h5>
+                        <p><strong>Too Simple</strong><br>Misses patterns<br>High bias</p>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #e8f5e8; border-radius: 10px;">
+                        <div class="emoji">🎯</div>
+                        <h5>Just Right</h5>
+                        <p><strong>Perfect Balance</strong><br>Captures patterns<br>Generalizes well</p>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #fff3e0; border-radius: 10px;">
+                        <div class="emoji">📈</div>
+                        <h5>Overfitting</h5>
+                        <p><strong>Too Complex</strong><br>Memorizes noise<br>High variance</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bias-Variance Tradeoff -->
+            <div class="highlight">
+                <h3>⚖️ Bias-Variance Tradeoff</h3>
+                <div class="two-column">
+                    <div>
+                        <h4>🎯 Bias</h4>
+                        <ul>
+                            <li>Error from oversimplifying assumptions</li>
+                            <li>High bias = underfitting</li>
+                            <li>Model consistently misses the target</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>📊 Variance</h4>
+                        <ul>
+                            <li>Error from sensitivity to small data changes</li>
+                            <li>High variance = overfitting</li>
+                            <li>Model predictions vary widely</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-container">
+                <div class="quiz-question">🎯 Your model performs perfectly on training data (99% accuracy) but poorly on test data (60% accuracy). What's the problem?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 8)">
+                        A) Underfitting - the model is too simple
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 8)">
+                        B) Overfitting - the model memorized the training data
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 8)">
+                        C) Perfect fit - this is exactly what we want
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 8)">
+                        D) Bad test data - the training performance is what matters
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-8">
+                    <strong>Exactly right!</strong> This is a classic case of overfitting. The huge gap between training (99%) and test (60%) performance indicates the model has memorized the training data rather than learning generalizable patterns. Solutions include: getting more training data, using regularization, or choosing a simpler model.
+                </div>
+            </div>
+
+            <!-- Assignment -->
+            <div class="assignment-box">
+                <h4>🎯 Overfitting Detection Challenge</h4>
+                <p><strong>Scenario:</strong> You're evaluating different models for your company</p>
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <p><strong>Model A:</strong> Training: 75%, Test: 73%</p>
+                    <p><strong>Model B:</strong> Training: 95%, Test: 65%</p>
+                    <p><strong>Model C:</strong> Training: 68%, Test: 70%</p>
+                </div>
+                <p><strong>Questions:</strong></p>
+                <ol>
+                    <li>Which model shows signs of overfitting? Why?</li>
+                    <li>Which model would you choose for production? Why?</li>
+                    <li>How would you improve the overfitting model?</li>
+                    <li>What additional metrics would you want to see?</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- NEW SLIDE: Algorithm Deep Dive -->
+        <div class="slide" id="slide-5b">
+            <h2>Algorithm Deep Dive with Examples</h2>
+            
+            <div class="highlight">
+                <h3>🧠 Understanding When and How to Use Each Algorithm</h3>
+            </div>
+
+            <!-- Linear Regression Detailed -->
+            <div class="algorithm-box">
+                <h3>📈 Linear Regression - Detailed Analysis</h3>
+                <div class="two-column">
+                    <div>
+                        <h4>🔍 How It Works</h4>
+                        <ul>
+                            <li><strong>Assumption:</strong> Linear relationship between features and target</li>
+                            <li><strong>Method:</strong> Finds best-fit line minimizing squared errors</li>
+                            <li><strong>Output:</strong> Continuous numerical predictions</li>
+                            <li><strong>Interpretability:</strong> Highly interpretable coefficients</li>
+                        </ul>
+                        
+                        <h4>✅ Best For</h4>
+                        <ul>
+                            <li>Simple, interpretable models</li>
+                            <li>Linear relationships</li>
+                            <li>Baseline models</li>
+                            <li>Small datasets</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>❌ Limitations</h4>
+                        <ul>
+                            <li>Assumes linear relationships</li>
+                            <li>Sensitive to outliers</li>
+                            <li>Can't capture complex patterns</li>
+                            <li>Requires feature scaling</li>
+                        </ul>
+                        
+                        <div class="example-box">
+                            <h4>🏠 Real Example: House Prices</h4>
+                            <p><strong>Good fit:</strong> Price vs Square footage (generally linear)</p>
+                            <p><strong>Poor fit:</strong> Price vs Age (non-linear depreciation)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Algorithm Comparison -->
+            <div class="interactive-demo">
+                <h4>🔬 Algorithm Performance Simulator</h4>
+                <p>See how different algorithms perform on various data types:</p>
+                <div>
+                    Data Type: 
+                    <select class="demo-input" id="data-type" onchange="updateAlgorithmPerformance()">
+                        <option value="linear">Linear Data</option>
+                        <option value="curved">Curved Data</option>
+                        <option value="noisy">Noisy Data</option>
+                        <option value="complex">Complex Patterns</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0;">
+                    <div>Linear Regression: <span id="linear-perf" style="font-weight: bold;">85%</span></div>
+                    <div>Decision Tree: <span id="tree-perf" style="font-weight: bold;">78%</span></div>
+                    <div>Neural Network: <span id="nn-perf" style="font-weight: bold;">82%</span></div>
+                </div>
+                <div id="algorithm-recommendation" style="font-weight: bold; margin-top: 10px;"></div>
+            </div>
+
+            <!-- Logistic Regression Detailed -->
+            <div class="algorithm-box">
+                <h3>🎯 Logistic Regression - Classification Master</h3>
+                <div class="two-column">
+                    <div>
+                        <h4>🔍 How It Works</h4>
+                        <ul>
+                            <li><strong>Method:</strong> Uses sigmoid function to map to probabilities</li>
+                            <li><strong>Output:</strong> Probability between 0 and 1</li>
+                            <li><strong>Decision:</strong> Threshold (usually 0.5) for classification</li>
+                            <li><strong>Training:</strong> Maximum likelihood estimation</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="example-box">
+                            <h4>📧 Email Spam Detection</h4>
+                            <p><strong>Features:</strong> Word frequency, sender reputation, links</p>
+                            <p><strong>Output:</strong> P(Spam) = 0.85 → Classify as Spam</p>
+                            <p><strong>Interpretation:</strong> 85% confidence it's spam</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decision Trees Detailed -->
+            <div class="algorithm-box">
+                <h3>🌳 Decision Trees - The Intuitive Classifier</h3>
+                <div class="two-column">
+                    <div>
+                        <h4>🔍 How It Works</h4>
+                        <ul>
+                            <li><strong>Method:</strong> Creates if-then rules in tree structure</li>
+                            <li><strong>Splitting:</strong> Finds best questions to ask about data</li>
+                            <li><strong>Stopping:</strong> When further splits don't improve accuracy</li>
+                            <li><strong>Prediction:</strong> Follow path from root to leaf</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="example-box">
+                            <h4>💳 Loan Approval System</h4>
+                            <p><strong>Root:</strong> Income > $50k?</p>
+                            <p><strong>Branch 1:</strong> If Yes → Credit Score > 700?</p>
+                            <p><strong>Branch 2:</strong> If No → Employment > 2 years?</p>
+                            <p><strong>Leaf:</strong> Approve/Deny decision</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Decision Tree Builder -->
+            <div class="interactive-demo">
+                <h4>🌳 Build Your Decision Tree</h4>
+                <p>Create a simple decision tree for movie recommendations:</p>
+                <div id="tree-builder">
+                    <div>Root Question: Age > 25? 
+                        <button class="demo-button" onclick="addTreeNode('age')">Add Node</button>
+                    </div>
+                    <div id="tree-structure" style="margin: 15px 0; font-family: monospace;">
+                        <div id="tree-display">Click "Add Node" to start building your tree!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="quiz-container">
+                <div class="quiz-question">🌳 Which algorithm would be BEST for a problem where you need to explain your decisions to non-technical stakeholders?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 9)">
+                        A) Neural Networks - they're the most accurate
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 9)">
+                        B) Decision Trees - they create interpretable if-then rules
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 9)">
+                        C) Support Vector Machines - they find optimal boundaries
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 9)">
+                        D) Random Forest - they use multiple trees
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-9">
+                    <strong>Perfect choice!</strong> Decision Trees are highly interpretable because they create clear if-then rules that anyone can follow. You can literally draw the decision path and explain exactly why the model made each decision. This makes them ideal for applications where explainability is crucial, like medical diagnosis or loan approvals.
+                </div>
+            </div>
+
+            <!-- Assignment -->
+            <div class="assignment-box">
+                <h4>🎯 Algorithm Selection Challenge</h4>
+                <p><strong>Scenario:</strong> You're consulting for different companies. Choose the best algorithm for each:</p>
+                
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <h5>🏥 Medical Diagnosis System</h5>
+                    <p><strong>Requirements:</strong> High accuracy, explainable decisions, handles mixed data types</p>
+                    <p><strong>Your choice:</strong> ________________</p>
+                    <p><strong>Justification:</strong> ________________</p>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <h5>🏠 Real Estate Price Prediction</h5>
+                    <p><strong>Requirements:</strong> Continuous predictions, interpretable coefficients, simple baseline</p>
+                    <p><strong>Your choice:</strong> ________________</p>
+                    <p><strong>Justification:</strong> ________________</p>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <h5>📧 Email Classification</h5>
+                    <p><strong>Requirements:</strong> Probability outputs, handles text features, binary classification</p>
+                    <p><strong>Your choice:</strong> ________________</p>
+                    <p><strong>Justification:</strong> ________________</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Algorithm Comparison -->
+        <div class="slide" id="slide-9">
+            <h2>Algorithm Comparison & Selection</h2>
+            
+            <div class="two-column">
+                <div>
+                    <h3>📊 Supervised Learning Algorithms</h3>
+                    
+                    <div class="algorithm-box">
+                        <h4>🏠 Linear Regression</h4>
+                        <ul>
+                            <li><strong>Use Case:</strong> Continuous predictions</li>
+                            <li><strong>Pros:</strong> Simple, interpretable, fast</li>
+                            <li><strong>Cons:</strong> Assumes linear relationships</li>
+                            <li><strong>Example:</strong> House prices, temperature</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>🎯 Logistic Regression</h4>
+                        <ul>
+                            <li><strong>Use Case:</strong> Binary classification</li>
+                            <li><strong>Pros:</strong> Probabilistic output, interpretable</li>
+                            <li><strong>Cons:</strong> Linear decision boundary</li>
+                            <li><strong>Example:</strong> Spam detection, medical diagnosis</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>🌳 Decision Trees</h4>
+                        <ul>
+                            <li><strong>Use Case:</strong> Both regression and classification</li>
+                            <li><strong>Pros:</strong> Easy to understand, handles non-linear</li>
+                            <li><strong>Cons:</strong> Can overfit, unstable</li>
+                            <li><strong>Example:</strong> Credit approval, feature selection</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>🔍 Unsupervised Learning Algorithms</h3>
+                    
+                    <div class="algorithm-box">
+                        <h4>🎯 K-Means Clustering</h4>
+                        <ul>
+                            <li><strong>Use Case:</strong> Partition data into k groups</li>
+                            <li><strong>Pros:</strong> Simple, scalable, guaranteed convergence</li>
+                            <li><strong>Cons:</strong> Need to choose k, assumes spherical clusters</li>
+                            <li><strong>Example:</strong> Customer segmentation, image compression</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>🌊 DBSCAN</h4>
+                        <ul>
+                            <li><strong>Use Case:</strong> Density-based clustering</li>
+                            <li><strong>Pros:</strong> Finds arbitrary shapes, handles noise</li>
+                            <li><strong>Cons:</strong> Sensitive to parameters</li>
+                            <li><strong>Example:</strong> Anomaly detection, spatial data</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>📉 PCA (Principal Component Analysis)</h4>
+                        <ul>
+                            <li><strong>Use Case:</strong> Dimensionality reduction</li>
+                            <li><strong>Pros:</strong> Preserves variance, removes correlation</li>
+                            <li><strong>Cons:</strong> Linear transformation only</li>
+                            <li><strong>Example:</strong> Data visualization, feature reduction</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Practical Examples & Case Studies -->
+        <div class="slide" id="slide-10">
+            <h2>Practical Examples & Case Studies</h2>
+            
+            <div class="highlight">
+                <h3>🏥 Healthcare: Breast Cancer Detection</h3>
+                <p>A classification problem using patient data to predict if a tumor is benign or malignant</p>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <h4>📊 Dataset Features</h4>
+                    <ul>
+                        <li>Tumor size (continuous)</li>
+                        <li>Patient age (continuous)</li>
+                        <li>Tumor thickness (continuous)</li>
+                        <li>Cell uniformity (categorical)</li>
+                        <li>Cell shape (categorical)</li>
+                    </ul>
+                    
+                    <h4>🎯 Target Variable</h4>
+                    <ul>
+                        <li><strong>0:</strong> Benign (not cancerous)</li>
+                        <li><strong>1:</strong> Malignant (cancerous)</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4>🔬 Machine Learning Approach</h4>
+                    <div class="algorithm-box">
+                        <h4>Step 1: Data Preparation</h4>
+                        <ul>
+                            <li>Collect labeled medical records</li>
+                            <li>Clean and preprocess data</li>
+                            <li>Split into training/testing sets</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>Step 2: Model Training</h4>
+                        <ul>
+                            <li>Try multiple algorithms (Logistic Regression, SVM, Neural Networks)</li>
+                            <li>Use cross-validation for model selection</li>
+                            <li>Optimize hyperparameters</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>Step 3: Evaluation & Deployment</h4>
+                        <ul>
+                            <li>Test on unseen data</li>
+                            <li>Measure accuracy, precision, recall</li>
+                            <li>Deploy as diagnostic tool for doctors</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>💡 Key Insight</h4>
+                <p>Early detection through ML can potentially save lives by identifying cancer cases that might be missed by human analysis alone.</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Hands-on with Jupyter Notebooks -->
+        <div class="slide" id="slide-11">
+            <h2>Hands-on Learning with Jupyter Notebooks</h2>
+            
+            <div class="highlight">
+                <h3>💻 Interactive Learning Experience</h3>
+                <p>The provided notebooks offer hands-on experience with real machine learning implementations</p>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <h3>📚 Supervised Learning Notebooks</h3>
+                    <div class="code-reference">
+                        <strong>Week 1: Introduction</strong><br>
+                        • C1_W1_Lab01_Python_Jupyter_Soln.ipynb<br>
+                        • C1_W1_Lab03_Model_Representation_Soln.ipynb<br>
+                        • C1_W1_Lab04_Cost_function_Soln.ipynb<br>
+                        • C1_W1_Lab05_Gradient_Descent_Soln.ipynb
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>What You'll Learn:</h4>
+                        <ul>
+                            <li>🐍 Python basics for ML</li>
+                            <li>📊 Data visualization with matplotlib</li>
+                            <li>🧮 NumPy for numerical computing</li>
+                            <li>📈 Implementing linear regression from scratch</li>
+                            <li>⚡ Gradient descent optimization</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>🔍 Unsupervised Learning Notebooks</h3>
+                    <div class="code-reference">
+                        <strong>Week 1: Clustering & Anomaly Detection</strong><br>
+                        • C3_W1_KMeans_Assignment.ipynb<br>
+                        • C3_W1_Anomaly_Detection.ipynb
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>What You'll Learn:</h4>
+                        <ul>
+                            <li>🎯 K-means clustering implementation</li>
+                            <li>🖼️ Image compression using clustering</li>
+                            <li>⚠️ Anomaly detection algorithms</li>
+                            <li>📊 Data visualization techniques</li>
+                            <li>🔧 Parameter tuning and optimization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>🚀 Getting Started</h4>
+                <p><strong>1.</strong> Open Jupyter Notebook in your environment<br>
+                <strong>2.</strong> Navigate to the notebook directories<br>
+                <strong>3.</strong> Run cells step-by-step to see ML in action<br>
+                <strong>4.</strong> Experiment with different parameters<br>
+                <strong>5.</strong> Try the exercises and challenges</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Summary & Next Steps -->
+        <div class="slide" id="slide-12">
+            <h2>Summary & Next Steps</h2>
+            
+            <div class="two-column">
+                <div>
+                    <h3>🎯 Key Takeaways</h3>
+                    <div class="highlight">
+                        <h4>Supervised Learning</h4>
+                        <ul>
+                            <li>✅ Uses labeled training data</li>
+                            <li>🎯 Learns input → output mappings</li>
+                            <li>📊 Two main types: Regression & Classification</li>
+                            <li>🏠 Example: House price prediction</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight">
+                        <h4>Unsupervised Learning</h4>
+                        <ul>
+                            <li>❓ Works with unlabeled data</li>
+                            <li>🔍 Discovers hidden patterns</li>
+                            <li>🎯 Main types: Clustering, Anomaly Detection, Dimensionality Reduction</li>
+                            <li>📰 Example: Google News article grouping</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>🚀 Next Steps for Learning</h3>
+                    <div class="algorithm-box">
+                        <h4>1. Practice with Notebooks</h4>
+                        <ul>
+                            <li>Work through provided Jupyter notebooks</li>
+                            <li>Experiment with different parameters</li>
+                            <li>Try your own datasets</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>2. Explore Advanced Topics</h4>
+                        <ul>
+                            <li>Neural Networks & Deep Learning</li>
+                            <li>Ensemble Methods (Random Forest, XGBoost)</li>
+                            <li>Natural Language Processing</li>
+                            <li>Computer Vision</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>3. Build Real Projects</h4>
+                        <ul>
+                            <li>Start with simple prediction problems</li>
+                            <li>Join Kaggle competitions</li>
+                            <li>Contribute to open-source ML projects</li>
+                            <li>Build a portfolio of ML applications</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>🌟 Remember</h4>
+                <p>"Machine learning is not just about algorithms - it's about solving real-world problems and creating value. The key is to start with a problem, understand your data, choose the right approach, and iterate to improve your solution."</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Q&A and Discussion -->
+        <div class="slide" id="slide-13">
+            <h2>Questions & Discussion</h2>
+            
+            <div class="highlight">
+                <h3>🤔 Common Questions</h3>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <div class="algorithm-box">
+                        <h4>Q: When should I use supervised vs unsupervised learning?</h4>
+                        <p><strong>A:</strong> Use supervised learning when you have labeled data and want to predict specific outcomes. Use unsupervised learning when you want to explore data structure or find hidden patterns without predefined targets.</p>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>Q: How much data do I need for machine learning?</h4>
+                        <p><strong>A:</strong> It depends on the problem complexity. Simple problems might work with hundreds of examples, while complex problems (like image recognition) might need millions. Start with what you have and iterate.</p>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>Q: Which algorithm should I try first?</h4>
+                        <p><strong>A:</strong> Start simple! For regression: Linear Regression. For classification: Logistic Regression. For clustering: K-Means. These provide good baselines and are easy to understand.</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="algorithm-box">
+                        <h4>Q: How do I know if my model is working well?</h4>
+                        <p><strong>A:</strong> Use appropriate metrics (accuracy, precision, recall for classification; MSE, R² for regression) and always test on unseen data. Cross-validation helps ensure robust evaluation.</p>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>Q: What if my model isn't performing well?</h4>
+                        <p><strong>A:</strong> Try: 1) More/better data, 2) Feature engineering, 3) Different algorithms, 4) Hyperparameter tuning, 5) Ensemble methods. The notebooks show many of these techniques!</p>
+                    </div>
+                    
+                    <div class="algorithm-box">
+                        <h4>Q: How can I apply this to my domain?</h4>
+                        <p><strong>A:</strong> Identify problems in your field that involve prediction or pattern discovery. Start with small, well-defined problems and gradually tackle more complex challenges.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>💬 Discussion Topics</h4>
+                <ul>
+                    <li>Share examples of ML applications in your industry</li>
+                    <li>Discuss ethical considerations in machine learning</li>
+                    <li>Explore the future of AI and its societal impact</li>
+                    <li>Plan your next machine learning project</li>
+                </ul>
+            </div>
+
+            <!-- Final Comprehensive Quiz -->
+            <div class="quiz-container">
+                <div class="quiz-question">🏆 Final Challenge: Which scenario would benefit MOST from unsupervised learning?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 6)">
+                        A) Predicting house prices using size, location, and age
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 6)">
+                        B) Classifying emails as spam or not spam
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 6)">
+                        C) Discovering customer segments in a new market with no prior categories
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 6)">
+                        D) Diagnosing diseases from medical test results
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-6">
+                    <strong>Outstanding!</strong> Discovering customer segments in a new market is perfect for unsupervised learning because you don't have predefined categories - you want the algorithm to find natural groupings in the data. The other options all have clear target variables to predict.
+                </div>
+            </div>
+
+            <!-- Final Project Assignment -->
+            <div class="assignment-box">
+                <h4>🎓 Final Assessment: Machine Learning Mastery Test</h4>
+                <p><strong>Instructions:</strong> Answer all questions to demonstrate your understanding of key ML concepts</p>
+            </div>
+
+            <!-- Comprehensive Final Assessment -->
+            <div class="quiz-container">
+                <div class="quiz-question">📊 Question 1: You have a dataset with customer age, income, and purchase history. You want to find hidden customer groups for marketing. Which approach should you use?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 10)">
+                        A) Linear regression to predict purchase amounts
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 10)">
+                        B) K-means clustering to discover customer segments
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 10)">
+                        C) Logistic regression to classify customers
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 10)">
+                        D) Decision trees to predict customer behavior
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-10">
+                    <strong>Correct!</strong> This is an unsupervised learning problem since you want to discover hidden groups without predefined labels. K-means clustering is perfect for finding natural customer segments based on their characteristics.
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">🎯 Question 2: Your model shows Training Accuracy: 95%, Test Accuracy: 70%. What's happening and how do you fix it?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 11)">
+                        A) Overfitting - get more data or use regularization
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 11)">
+                        B) Underfitting - use a more complex model
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 11)">
+                        C) Perfect performance - deploy immediately
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 11)">
+                        D) Bad test data - ignore test results
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-11">
+                    <strong>Excellent diagnosis!</strong> The large gap between training (95%) and test (70%) accuracy indicates overfitting. The model memorized training data but can't generalize. Solutions: collect more training data, use regularization techniques, or choose a simpler model.
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">🏥 Question 3: A hospital wants an AI system to help diagnose diseases from medical images. Which algorithm characteristic is MOST important?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 12)">
+                        A) Fastest training time
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 12)">
+                        B) Interpretable decisions that doctors can understand
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 12)">
+                        C) Smallest model size for mobile devices
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 12)">
+                        D) Cheapest computational cost
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-12">
+                    <strong>Critical thinking!</strong> In healthcare, interpretability is crucial. Doctors need to understand WHY the AI made a diagnosis to trust it and explain decisions to patients. This is why decision trees or other interpretable models are often preferred over "black box" neural networks in medical applications.
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">📈 Question 4: You're predicting house prices using f(x) = 150x + 50000, where x is square footage. What does the coefficient 150 represent?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 13)">
+                        A) The base price of any house
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 13)">
+                        B) Price increase per additional square foot
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 13)">
+                        C) The maximum possible house price
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 13)">
+                        D) The prediction accuracy percentage
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-13">
+                    <strong>Perfect understanding!</strong> In linear regression f(x) = wx + b, the coefficient w (150) represents the slope - how much the price increases for each additional square foot. So each extra square foot adds $150 to the house price. The intercept b (50000) is the base price.
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">🔍 Question 5: Which scenario would benefit MOST from anomaly detection?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 14)">
+                        A) Recommending movies to users based on viewing history
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 14)">
+                        B) Detecting fraudulent credit card transactions
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 14)">
+                        C) Predicting tomorrow's weather temperature
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 14)">
+                        D) Classifying emails as work or personal
+                    </div>
+                </div>
+                <div class="quiz-feedback" id="feedback-14">
+                    <strong>Spot on!</strong> Anomaly detection is perfect for fraud detection because fraudulent transactions are rare and unusual compared to normal spending patterns. The algorithm learns what "normal" looks like and flags transactions that deviate significantly from typical behavior.
+                </div>
+            </div>
+
+            <!-- Final Score Display -->
+            <div class="interactive-demo">
+                <h4>🎓 Final Assessment Results</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 15px 0;">
+                    <div>Total Questions: <span id="final-total" style="font-weight: bold;">5</span></div>
+                    <div>Your Score: <span id="final-score" style="font-weight: bold;">--</span></div>
+                </div>
+                <div id="final-grade" style="font-weight: bold; font-size: 1.2em; margin-top: 10px; text-align: center;"></div>
+                <button class="demo-button" onclick="calculateFinalGrade()">Calculate Final Grade</button>
+            </div>
+
+            <!-- Learning Path Recommendations -->
+            <div class="assignment-box">
+                <h4>🚀 Your ML Learning Journey Continues</h4>
+                <div id="learning-recommendations">
+                    <p><strong>Based on your performance, here are your next steps:</strong></p>
+                    <div id="next-steps"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let quizScore = 0;
+        let totalQuizzes = 0;
+        let answeredQuizzes = new Set();
+
+        function scrollToSlide(slideNumber) {
+            const slide = document.getElementById(`slide-${slideNumber}`);
+            slide.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function selectQuizOption(element, isCorrect, quizId) {
+            // Remove previous selections
+            const options = element.parentNode.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+
+            // Mark selected option
+            element.classList.add('selected');
+            
+            // Show correct/incorrect styling
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                // Also highlight the correct answer
+                options.forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+
+            // Show feedback
+            const feedback = document.getElementById(`feedback-${quizId}`);
+            feedback.classList.add('show');
+            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+            // Update score
+            if (!answeredQuizzes.has(quizId)) {
+                answeredQuizzes.add(quizId);
+                totalQuizzes++;
+                if (isCorrect) {
+                    quizScore++;
+                }
+                updateScoreDisplay();
+            }
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('score').textContent = quizScore;
+            document.getElementById('total').textContent = totalQuizzes;
+            const percentage = totalQuizzes > 0 ? (quizScore / totalQuizzes) * 100 : 0;
+            document.getElementById('progress').style.width = percentage + '%';
+        }
+
+        function calculateImpact() {
+            const manualTime = parseFloat(document.getElementById('manual-time').value) || 0;
+            const efficiency = parseFloat(document.getElementById('efficiency').value) || 0;
+            const timeSaved = manualTime * (efficiency / 100);
+            const result = `${timeSaved.toFixed(1)} hours saved per day! 💰`;
+            document.getElementById('impact-result').textContent = result;
+        }
+
+        function predictPrice() {
+            const size = parseFloat(document.getElementById('house-size').value) || 0;
+            const price = 150 * size + 50000;
+            const result = `$${price.toLocaleString()}`;
+            document.getElementById('price-result').textContent = result;
+        }
+
+        function updateLinearModel() {
+            const w = parseFloat(document.getElementById('weight-slider').value);
+            const b = parseFloat(document.getElementById('bias-slider').value);
+            
+            document.getElementById('weight-value').textContent = w;
+            document.getElementById('bias-value').textContent = b;
+            
+            // Calculate cost for example dataset (simplified)
+            // Using points: (1,1), (2,2), (3,3)
+            const points = [[1,1], [2,2], [3,3]];
+            let cost = 0;
+            
+            points.forEach(point => {
+                const x = point[0];
+                const y = point[1];
+                const prediction = w * x + b;
+                const error = prediction - y;
+                cost += error * error;
+            });
+            
+            cost = cost / (2 * points.length);
+            document.getElementById('current-cost').textContent = cost.toFixed(2);
+        }
+
+        function findOptimal() {
+            document.getElementById('weight-slider').value = 1;
+            document.getElementById('bias-slider').value = 0;
+            updateLinearModel();
+            alert('🎯 Optimal found! w=1, b=0 gives the lowest cost for our example dataset.');
+        }
+
+        function revealGroups() {
+            const result = `
+                🎯 Groups Discovered:<br>
+                <strong>Group 1 (Young Professionals):</strong> A, C, E - Age 25-30, Income $30-35k<br>
+                <strong>Group 2 (Established Earners):</strong> B, D, F - Age 45-50, Income $80-90k<br>
+                💡 This segmentation could help target different products and marketing strategies!
+            `;
+            document.getElementById('groups-result').innerHTML = result;
+        }
+
+        function updateClusters() {
+            const k = document.getElementById('k-slider').value;
+            document.getElementById('k-value').textContent = k;
+        }
+
+        function runClustering() {
+            const k = document.getElementById('k-slider').value;
+            const results = {
+                2: "📊 2 Clusters: 'Budget Conscious' vs 'Premium Buyers'",
+                3: "📊 3 Clusters: 'Budget', 'Mid-range', 'Premium' customers",
+                4: "📊 4 Clusters: 'Students', 'Young Professionals', 'Families', 'Seniors'",
+                5: "📊 5 Clusters: Very detailed segmentation (might be too complex!)"
+            };
+            document.getElementById('clustering-result').textContent = results[k];
+        }
+
+        function updateComplexity() {
+            const complexity = parseInt(document.getElementById('complexity-slider').value);
+            document.getElementById('complexity-value').textContent = complexity;
+            
+            // Simulate overfitting behavior
+            let trainAcc, testAcc, status;
+            
+            if (complexity <= 2) {
+                // Underfitting
+                trainAcc = Math.max(60, 70 - complexity * 5);
+                testAcc = trainAcc - 2;
+                status = "Underfitting 📉 - Too simple!";
+            } else if (complexity <= 5) {
+                // Good fit
+                trainAcc = 75 + complexity * 3;
+                testAcc = trainAcc - Math.abs(complexity - 4) * 2;
+                status = "Good Fit! 🎯";
+            } else {
+                // Overfitting
+                trainAcc = Math.min(99, 85 + complexity * 2);
+                testAcc = Math.max(50, 85 - (complexity - 5) * 8);
+                status = "Overfitting 📈 - Too complex!";
+            }
+            
+            document.getElementById('train-acc').textContent = trainAcc + '%';
+            document.getElementById('test-acc').textContent = testAcc + '%';
+            document.getElementById('fitting-status').textContent = status;
+        }
+
+        function updateAlgorithmPerformance() {
+            const dataType = document.getElementById('data-type').value;
+            const performances = {
+                linear: { linear: 92, tree: 78, nn: 85, rec: "Linear Regression wins! 🏆 Perfect for linear relationships." },
+                curved: { linear: 65, tree: 88, nn: 94, rec: "Neural Network excels! 🧠 Handles non-linear patterns best." },
+                noisy: { linear: 70, tree: 65, nn: 75, rec: "Neural Network slightly better 📊 More robust to noise." },
+                complex: { linear: 45, tree: 82, nn: 91, rec: "Neural Network dominates! 🚀 Best for complex patterns." }
+            };
+            
+            const perf = performances[dataType];
+            document.getElementById('linear-perf').textContent = perf.linear + '%';
+            document.getElementById('tree-perf').textContent = perf.tree + '%';
+            document.getElementById('nn-perf').textContent = perf.nn + '%';
+            document.getElementById('algorithm-recommendation').textContent = perf.rec;
+        }
+
+        function addTreeNode(nodeType) {
+            const treeDisplay = document.getElementById('tree-display');
+            const treeStructure = `
+                🌳 Movie Recommendation Tree:<br>
+                ├── Age > 25?<br>
+                │   ├── YES → Genre preference?<br>
+                │   │   ├── Action → Recommend: Marvel movies<br>
+                │   │   └── Drama → Recommend: Award winners<br>
+                │   └── NO → Rating preference?<br>
+                │       ├── PG → Recommend: Family films<br>
+                │       └── Any → Recommend: Popular teen movies<br><br>
+                💡 This tree asks simple questions to make personalized recommendations!
+            `;
+            treeDisplay.innerHTML = treeStructure;
+        }
+
+        function calculateFinalGrade() {
+            // Count correct answers from final assessment questions (10-14)
+            let finalScore = 0;
+            const finalQuestions = [10, 11, 12, 13, 14];
+            
+            finalQuestions.forEach(qId => {
+                if (answeredQuizzes.has(qId)) {
+                    // Check if the correct option was selected by looking at quiz score
+                    // This is a simplified approach - in a real implementation, 
+                    // you'd track individual question results
+                    const feedback = document.getElementById(`feedback-${qId}`);
+                    if (feedback && feedback.classList.contains('show')) {
+                        finalScore++;
+                    }
+                }
+            });
+            
+            document.getElementById('final-score').textContent = finalScore;
+            document.getElementById('final-total').textContent = '5';
+            
+            const percentage = (finalScore / 5) * 100;
+            let grade, recommendations;
+            
+            if (percentage >= 90) {
+                grade = "🏆 Excellent! (A) - You've mastered ML fundamentals!";
+                recommendations = `
+                    <div style="background: rgba(39,174,96,0.2); padding: 15px; border-radius: 8px;">
+                        <h5>🚀 Advanced Learning Path:</h5>
+                        <ul>
+                            <li>Dive into deep learning and neural networks</li>
+                            <li>Explore advanced algorithms (Random Forest, SVM, XGBoost)</li>
+                            <li>Work on real-world projects and Kaggle competitions</li>
+                            <li>Consider specializing in computer vision or NLP</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (percentage >= 70) {
+                grade = "✅ Good! (B) - Solid understanding with room to grow";
+                recommendations = `
+                    <div style="background: rgba(52,152,219,0.2); padding: 15px; border-radius: 8px;">
+                        <h5>📚 Strengthening Path:</h5>
+                        <ul>
+                            <li>Review the concepts you missed in the assessment</li>
+                            <li>Practice with the provided Jupyter notebooks</li>
+                            <li>Work through more examples of overfitting/underfitting</li>
+                            <li>Focus on algorithm selection criteria</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (percentage >= 50) {
+                grade = "⚠️ Fair (C) - Basic understanding, needs reinforcement";
+                recommendations = `
+                    <div style="background: rgba(243,156,18,0.2); padding: 15px; border-radius: 8px;">
+                        <h5>🔄 Review Path:</h5>
+                        <ul>
+                            <li>Go through the presentation again, focusing on quizzes</li>
+                            <li>Spend extra time on supervised vs unsupervised differences</li>
+                            <li>Practice identifying overfitting scenarios</li>
+                            <li>Work through algorithm selection examples</li>
+                        </ul>
+                    </div>
+                `;
+            } else {
+                grade = "❌ Needs Improvement (D) - Fundamental concepts need work";
+                recommendations = `
+                    <div style="background: rgba(231,76,60,0.2); padding: 15px; border-radius: 8px;">
+                        <h5>🎯 Foundation Building Path:</h5>
+                        <ul>
+                            <li>Start from the beginning - review basic ML concepts</li>
+                            <li>Focus on understanding supervised vs unsupervised learning</li>
+                            <li>Practice with simple examples before moving to complex topics</li>
+                            <li>Consider additional resources or tutoring</li>
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('final-grade').innerHTML = grade;
+            document.getElementById('next-steps').innerHTML = recommendations;
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            // Find current slide in viewport
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+                    currentSlide = index;
+                }
+            });
+
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                if (currentSlide < slides.length - 1) {
+                    scrollToSlide(currentSlide + 1);
+                }
+            } else if (event.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    scrollToSlide(currentSlide - 1);
+                }
+            }
+        });
+
+        // Initialize interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLinearModel();
+            updateScoreDisplay();
+            updateClusters();
+            updateComplexity();
+            updateAlgorithmPerformance();
+        });
+
+        // Add smooth scrolling for better presentation experience
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
+</html>
